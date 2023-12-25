@@ -78,6 +78,7 @@ export const Swiper = ({
         {...props}
         ref={scrollRef}
         style={[styles.root, style]}
+        bounces={false}
         horizontal={true}
         pagingEnabled={true}
         scrollEventThrottle={16}
