@@ -6,6 +6,7 @@ import {
   ScrollView,
   ScrollViewProps,
   StyleSheet,
+  View,
   useWindowDimensions,
 } from 'react-native';
 
@@ -21,6 +22,7 @@ export const Swiper = ({
   current,
   trackedIndex,
   style,
+  children,
   onChange,
   onScroll,
   onMomentumScrollEnd,
@@ -30,7 +32,7 @@ export const Swiper = ({
 
   const viewIndex = useRef(current || 0);
   const scrollRef = useRef<ScrollView>();
-  const totalViews = React.Children.count(props.children);
+  const totalViews = React.Children.count(children);
   const contentOffset = { x: viewIndex.current * width, y: 0 };
 
   const scrollX = useRef(new Animated.Value(contentOffset.x)).current;
@@ -70,28 +72,40 @@ export const Swiper = ({
     [width, onChange, onMomentumScrollEnd],
   );
 
+  const translateX = scrollX.interpolate({
+    inputRange: [-1, 0, 1],
+    outputRange: [1, 0, -1],
+  });
+
   console.log('RENDER SWIPER');
 
   return (
     <Context.Provider value={{ width, totalViews, scrollX }}>
-      <Animated.ScrollView
-        {...props}
-        ref={scrollRef}
-        style={[styles.root, style]}
-        horizontal={true}
-        pagingEnabled={true}
-        scrollEventThrottle={16}
-        pinchGestureEnabled={false}
-        contentOffset={contentOffset}
-        disableIntervalMomentum={true}
-        showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}
-        onMomentumScrollEnd={handleScrollEnd}
-        onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], {
-          useNativeDriver: false,
-          listener: onScroll,
-        })}
-      />
+      <View style={[styles.root, style]}>
+        <Animated.View style={[styles.stack, { transform: [{ translateX }] }]}>
+          {children}
+        </Animated.View>
+        <Animated.ScrollView
+          {...props}
+          ref={scrollRef}
+          style={StyleSheet.absoluteFillObject}
+          //bounces={false}
+          horizontal={true}
+          pagingEnabled={true}
+          scrollEventThrottle={16}
+          pinchGestureEnabled={false}
+          contentOffset={contentOffset}
+          disableIntervalMomentum={true}
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}
+          onMomentumScrollEnd={handleScrollEnd}
+          contentContainerStyle={{ width: width * totalViews }}
+          onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], {
+            useNativeDriver: false,
+            listener: onScroll,
+          })}
+        />
+      </View>
     </Context.Provider>
   );
 };
@@ -99,5 +113,9 @@ export const Swiper = ({
 const styles = StyleSheet.create({
   root: {
     flex: 1,
+  },
+  stack: {
+    flex: 1,
+    flexDirection: 'row',
   },
 });

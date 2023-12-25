@@ -46,6 +46,7 @@ export const SwiperView = ({
   }, [animatedOffset, scrollX, position, width, stiffness, damping, mass]);
 
   // To compensate edge bounces
+  // Required only when ScrollView bounces=true
   const rightEdge = (totalViews - 1) * width;
   const translateX = scrollX.interpolate({
     inputRange: [-1, 0, rightEdge, rightEdge + 1],
