@@ -2,10 +2,13 @@ import React, { useCallback, useRef, useState } from 'react';
 import {
   Animated,
   ImageSourcePropType,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
   StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from 'react-native';
 import { Swiper, SwiperView } from 'react-native-parallax-intro';
@@ -71,12 +74,11 @@ const views: Content[] = [
 
 type ButtonProps = {
   index: number;
-  total: number;
   onPress: (index: number) => void;
 };
 
-const Button = ({ index, total, onPress }: ButtonProps) => {
-  const isLast = index + 1 === total;
+const Button = ({ index, onPress }: ButtonProps) => {
+  const isLast = index + 1 === views.length;
 
   const handlePress = useCallback(() => {
     onPress(isLast ? 0 : index + 1);
@@ -90,8 +92,9 @@ const Button = ({ index, total, onPress }: ButtonProps) => {
 };
 
 const App = () => {
+  const { width } = useWindowDimensions();
   const [current, setCurrent] = useState(0);
-  const animatedCurrent = useRef(new Animated.Value(0)).current;
+  const currentPage = useRef(new Animated.Value(0)).current;
   // const [loading, setLoading] = useState(true);
 
   // useLayoutEffect(() => {
@@ -101,19 +104,26 @@ const App = () => {
   //   });
   // }, []);
 
+  const handleScroll = useCallback(
+    ({ nativeEvent }: NativeSyntheticEvent<NativeScrollEvent>) => {
+      currentPage.setValue(nativeEvent.contentOffset.x / width);
+    },
+    [currentPage, width],
+  );
+
   return (
     <View style={styles.root}>
-      <Swiper current={current} trackedIndex={animatedCurrent} onChange={setCurrent}>
+      <Swiper current={current} onChange={setCurrent} onScroll={handleScroll}>
         {views.map(({ title, text, images }, index) => (
           <SwiperView key={index} index={index} style={styles.view} images={images}>
             <Text style={styles.title}>{title}</Text>
             <Text style={styles.text}>{text}</Text>
-            <Button index={index} total={views.length} onPress={setCurrent} />
+            <Button index={index} onPress={setCurrent} />
           </SwiperView>
         ))}
       </Swiper>
       <View style={styles.pageIndicator}>
-        <PageIndicator count={views.length} current={animatedCurrent} color="white" />
+        <PageIndicator count={views.length} current={currentPage} color="white" />
       </View>
     </View>
   );

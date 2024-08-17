@@ -13,13 +13,11 @@ import { Context } from './context';
 
 export type SwiperProps = ScrollViewProps & {
   current?: number;
-  trackedIndex?: Animated.Value;
   onChange?: (index: number) => void;
 };
 
 export const Swiper = ({
   current,
-  trackedIndex,
   style,
   onChange,
   onScroll,
@@ -34,27 +32,15 @@ export const Swiper = ({
   const contentOffset = { x: viewIndex.current * width, y: 0 };
 
   const scrollX = useRef(new Animated.Value(contentOffset.x)).current;
-  const animatedIndex = useRef(Animated.divide(scrollX, width)).current;
 
   useEffect(() => console.log('> MOUNTED SWIPER'), []);
 
   useEffect(() => {
+    // Scroll to the current view in controlled mode
     if (current !== undefined) {
-      // Scroll to the current view in controlled mode
       scrollRef.current?.scrollTo({ x: current * width, y: 0, animated: true });
     }
   }, [current, width]);
-
-  useEffect(() => {
-    if (trackedIndex) {
-      // Tracking external animated value
-      Animated.timing(trackedIndex, {
-        duration: 0,
-        toValue: animatedIndex,
-        useNativeDriver: false,
-      }).start();
-    }
-  }, [trackedIndex, animatedIndex]);
 
   const handleScrollEnd = useCallback(
     (e: NativeSyntheticEvent<NativeScrollEvent>) => {
