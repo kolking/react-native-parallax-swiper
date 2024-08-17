@@ -1,11 +1,12 @@
 import React from 'react';
-import { Animated, ImageProps, StyleSheet, View } from 'react-native';
+import { Animated, ImageProps, ImageSourcePropType, StyleSheet, View } from 'react-native';
 
 import { useImageDimensions } from './hooks';
 
 type SwiperImageProps = ImageProps & {
   imageOffset: number;
-  animatedValue: Animated.AnimatedInterpolation;
+  source: ImageSourcePropType;
+  animatedValue: Animated.AnimatedInterpolation<number>;
 };
 
 const SwiperImage = ({ imageOffset, animatedValue, ...props }: SwiperImageProps) => {

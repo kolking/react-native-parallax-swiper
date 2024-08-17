@@ -29,7 +29,7 @@ export const Swiper = ({
   const { width } = useWindowDimensions();
 
   const viewIndex = useRef(current || 0);
-  const scrollRef = useRef<ScrollView>();
+  const scrollRef = useRef<ScrollView>(null);
   const totalViews = React.Children.count(props.children);
   const contentOffset = { x: viewIndex.current * width, y: 0 };
 

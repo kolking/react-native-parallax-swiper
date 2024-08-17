@@ -112,12 +112,9 @@ const App = () => {
           </SwiperView>
         ))}
       </Swiper>
-      <PageIndicator
-        style={styles.pageIndicator}
-        count={views.length}
-        current={animatedCurrent}
-        color="white"
-      />
+      <View style={styles.pageIndicator}>
+        <PageIndicator count={views.length} current={animatedCurrent} color="white" />
+      </View>
     </View>
   );
 };
@@ -158,6 +155,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 35,
+    alignItems: 'center',
     position: 'absolute',
   },
 });
