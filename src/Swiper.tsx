@@ -25,12 +25,10 @@ export const Swiper = ({
   ...props
 }: SwiperProps) => {
   const { width } = useWindowDimensions();
-
   const viewIndex = useRef(current || 0);
   const scrollRef = useRef<ScrollView>(null);
   const totalViews = React.Children.count(props.children);
   const contentOffset = { x: viewIndex.current * width, y: 0 };
-
   const scrollX = useRef(new Animated.Value(contentOffset.x)).current;
 
   useEffect(() => console.log('> MOUNTED SWIPER'), []);

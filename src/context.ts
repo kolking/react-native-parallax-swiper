@@ -4,7 +4,7 @@ import { Animated, Dimensions } from 'react-native';
 type ContextType = {
   width: number;
   totalViews: number;
-  scrollX: Animated.AnimatedValue;
+  scrollX: Animated.Value;
 };
 
 export const Context = createContext<ContextType>({

@@ -37,7 +37,7 @@ export const SwiperView = ({
         inputRange: [position - width, position, position + width],
         outputRange: [1, 0, -1],
         extrapolate: 'clamp',
-      }) as Animated.Value,
+      }),
       stiffness,
       damping,
       mass,

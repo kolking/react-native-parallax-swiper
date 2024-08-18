@@ -6,7 +6,7 @@ import { useImageDimensions } from './hooks';
 type SwiperImageProps = ImageProps & {
   imageOffset: number;
   source: ImageSourcePropType;
-  animatedValue: Animated.AnimatedInterpolation<number>;
+  animatedValue: Animated.Value;
 };
 
 const SwiperImage = ({ imageOffset, animatedValue, ...props }: SwiperImageProps) => {
