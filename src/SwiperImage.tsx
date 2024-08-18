@@ -1,33 +1,49 @@
-import React from 'react';
-import { ImageProps, ImageSourcePropType, StyleSheet, View } from 'react-native';
+import React, { useContext } from 'react';
+import { ImageSourcePropType, StyleSheet, View } from 'react-native';
 import Animated, {
   Extrapolation,
   interpolate,
-  SharedValue,
   useAnimatedStyle,
+  withSpring,
 } from 'react-native-reanimated';
 
+import { Context } from './context';
 import { useImageDimensions } from './hooks';
 
-type SwiperImageProps = ImageProps & {
-  imageOffset: number;
+type SwiperImageProps = {
+  index: number;
+  offset: number;
   source: ImageSourcePropType;
-  animatedValue: SharedValue<number>;
+  stiffness: number;
+  damping: number;
+  mass: number;
 };
 
-const SwiperImage = ({ imageOffset, animatedValue, ...props }: SwiperImageProps) => {
-  const { width, height } = useImageDimensions(props.source);
+const SwiperImage = ({ index, offset, source, stiffness, damping, mass }: SwiperImageProps) => {
+  const { width: screenWidth, scrollX } = useContext(Context);
+  const { width, height } = useImageDimensions(source);
+  const aspectRatio = width / height;
+  const position = index * screenWidth;
+  const positionPrev = position - screenWidth;
+  const positionNext = position + screenWidth;
 
   const animatedStyles = useAnimatedStyle(() => ({
-    width,
-    height,
+    height: '100%',
+    aspectRatio,
     transform: [
       {
-        translateX: interpolate(
-          animatedValue.value,
-          [-1, 0, 1],
-          [-imageOffset, 0, imageOffset],
-          Extrapolation.CLAMP,
+        translateX: withSpring(
+          interpolate(
+            scrollX.value,
+            [positionPrev, position, positionNext],
+            [offset, 0, -offset],
+            Extrapolation.CLAMP,
+          ),
+          {
+            stiffness,
+            damping,
+            mass,
+          },
         ),
       },
     ],
@@ -36,14 +52,14 @@ const SwiperImage = ({ imageOffset, animatedValue, ...props }: SwiperImageProps)
   console.log('RENDER IMAGE');
 
   return (
-    <View style={styles.image}>
-      <Animated.Image {...props} style={animatedStyles} />
+    <View style={styles.wrapper}>
+      <Animated.Image source={source} style={animatedStyles} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  image: {
+  wrapper: {
     ...StyleSheet.absoluteFillObject,
     overflow: 'hidden',
     alignItems: 'center',

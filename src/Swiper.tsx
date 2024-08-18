@@ -29,7 +29,6 @@ export const Swiper = ({
   ...props
 }: SwiperProps) => {
   const { width } = useWindowDimensions();
-
   const viewIndex = useRef(current || 0);
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
   const scrollX = useScrollViewOffset(scrollRef);
@@ -69,7 +68,7 @@ export const Swiper = ({
         style={[styles.root, style]}
         horizontal={true}
         pagingEnabled={true}
-        scrollEventThrottle={16}
+        scrollEventThrottle={8}
         pinchGestureEnabled={false}
         contentOffset={contentOffset}
         disableIntervalMomentum={true}

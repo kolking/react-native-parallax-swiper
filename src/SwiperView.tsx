@@ -1,13 +1,6 @@
 import React, { useContext } from 'react';
 import { ImageSourcePropType, StyleProp, View, ViewProps, ViewStyle } from 'react-native';
-import Animated, {
-  Extrapolation,
-  interpolate,
-  useAnimatedStyle,
-  useDerivedValue,
-  useSharedValue,
-  withSpring,
-} from 'react-native-reanimated';
+import Animated, { Extrapolation, interpolate, useAnimatedStyle } from 'react-native-reanimated';
 
 import SwiperImage from './SwiperImage';
 import { Context } from './context';
@@ -26,7 +19,7 @@ export const SwiperView = ({
   index,
   images,
   parallax = 1,
-  stiffness = 100,
+  stiffness = 50,
   damping = 50,
   mass = 1,
   style,
@@ -35,17 +28,7 @@ export const SwiperView = ({
   ...props
 }: SwiperViewProps) => {
   const { width, totalViews, scrollX } = useContext(Context);
-  const animatedOffset = useSharedValue(0);
-  const shiftImage = (width * parallax) / (images.length - 1);
-
-  useDerivedValue(() => {
-    const toValue = (scrollX.value - width * index) / -width;
-    animatedOffset.value = withSpring(toValue, {
-      stiffness,
-      damping,
-      mass,
-    });
-  });
+  const parallaxShift = (width * parallax) / (images.length - 1);
 
   // Compensate edge bounces
   const rightEdge = (totalViews - 1) * width;
@@ -71,8 +54,11 @@ export const SwiperView = ({
         <SwiperImage
           key={imageIndex}
           source={image}
-          animatedValue={animatedOffset}
-          imageOffset={shiftImage * imageIndex}
+          index={index}
+          offset={imageIndex * parallaxShift}
+          stiffness={stiffness}
+          damping={damping}
+          mass={mass}
         />
       ))}
       <View style={contentStyle}>{children}</View>
