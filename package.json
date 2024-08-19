@@ -1,27 +1,30 @@
 {
-  "name": "react-native-parallax-intro",
+  "name": "@kolking/react-native-parallax-swiper",
   "version": "1.0.0",
-  "description": "React Native component to create an intro for your app using parallax effect.",
+  "description": "React Native component to create an inpressive swiper with parallax effect.",
   "author": "Nick Seryakov (https://github.com/kolking)",
   "license": "MIT",
-  "homepage": "https://github.com/kolking/react-native-parallax-intro#readme",
+  "homepage": "https://github.com/kolking/react-native-parallax-swiper#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://kolking@github.com/kolking/react-native-parallax-intro.git"
+    "url": "git+https://kolking@github.com/kolking/react-native-parallax-swiper.git"
   },
   "bugs": {
-    "url": "https://github.com/kolking/react-native-parallax-intro/issues"
+    "url": "https://github.com/kolking/react-native-parallax-swiper/issues"
   },
   "keywords": [
     "react-native",
     "ios",
     "android",
     "parallax",
-    "intro",
     "swiper",
-    "scrollable",
+    "carousel",
+    "intro",
     "onboarding",
-    "welcome"
+    "scrollable",
+    "reanimated",
+    "parallax swiper",
+    "parallax carousel"
   ],
   "main": "src/index",
   "react-native": "src/index",

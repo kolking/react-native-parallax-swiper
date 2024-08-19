@@ -3,7 +3,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "react-native-parallax-intro": ["./src/index"]
+      "@kolking/react-native-parallax-swiper": ["./src/index"]
     }
   }
 }
