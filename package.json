@@ -1,6 +1,6 @@
 {
   "name": "@kolking/react-native-parallax-swiper",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "React Native component for building an impressive horizontal swiper with a parallax effect.",
   "author": "Nick Seryakov (https://github.com/kolking)",
   "license": "MIT",
