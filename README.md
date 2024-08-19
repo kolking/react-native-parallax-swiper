@@ -8,7 +8,7 @@ A React Native component for building an impressive horizontal swiper with a par
 
 ## Installation
 
-First of all, make sure you have installed and properly configured Reanimated. Please referer to the official [installation guide](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/getting-started#installation).
+First of all, make sure you have installed and properly configured Reanimated. Please refer to the official [installation guide](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/getting-started#installation).
 
 ### yarn
 ```sh
