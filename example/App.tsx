@@ -11,7 +11,7 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
-import { Swiper, SwiperView } from 'react-native-parallax-intro';
+import { Swiper, SwiperView } from '@kolking/react-native-parallax-swiper';
 import { PageIndicator } from 'react-native-page-indicator';
 
 StatusBar.setBarStyle('light-content');
@@ -58,20 +58,6 @@ const views: Content[] = [
   },
 ];
 
-// async function preloadImages() {
-//   const images = views.reduce((acc: ImageSourcePropType[], curr) => {
-//     return acc.concat(...curr.images);
-//   }, []);
-
-//   return Promise.all(
-//     images.map(async (image) => {
-//       const { uri } = Image.resolveAssetSource(image);
-//       console.log('prefetching', uri);
-//       return Image.prefetch(uri);
-//     }),
-//   );
-// }
-
 type ButtonProps = {
   index: number;
   onPress: (index: number) => void;
@@ -95,14 +81,6 @@ const App = () => {
   const { width } = useWindowDimensions();
   const [current, setCurrent] = useState(0);
   const currentPage = useRef(new Animated.Value(0)).current;
-  // const [loading, setLoading] = useState(true);
-
-  // useLayoutEffect(() => {
-  //   preloadImages().then(() => {
-  //     console.log('DONE PRELOADING');
-  //     setLoading(false);
-  //   });
-  // }, []);
 
   const handleScroll = useCallback(
     ({ nativeEvent }: NativeSyntheticEvent<NativeScrollEvent>) => {

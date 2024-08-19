@@ -1,5 +1,6 @@
-import React, { useContext, useEffect, useRef } from 'react';
-import { Animated, ImageSourcePropType, StyleProp, View, ViewProps, ViewStyle } from 'react-native';
+import React, { useContext } from 'react';
+import { ImageSourcePropType, StyleProp, View, ViewProps, ViewStyle } from 'react-native';
+import Animated, { Extrapolation, interpolate, useAnimatedStyle } from 'react-native-reanimated';
 
 import SwiperImage from './SwiperImage';
 import { Context } from './context';
@@ -27,41 +28,35 @@ export const SwiperView = ({
   ...props
 }: SwiperViewProps) => {
   const { width, totalViews, scrollX } = useContext(Context);
-  const animatedOffset = useRef(new Animated.Value(0)).current;
-  const shiftImage = (width * parallax) / (images.length - 1);
-  const position = width * index;
+  const parallaxShift = (width * parallax) / (images.length - 1);
 
-  useEffect(() => {
-    Animated.spring(animatedOffset, {
-      toValue: scrollX.interpolate({
-        inputRange: [position - width, position, position + width],
-        outputRange: [1, 0, -1],
-        extrapolate: 'clamp',
-      }),
-      stiffness,
-      damping,
-      mass,
-      useNativeDriver: false,
-    }).start();
-  }, [animatedOffset, scrollX, position, width, stiffness, damping, mass]);
-
-  // To compensate edge bounces
+  // Compensate edge bounces
   const rightEdge = (totalViews - 1) * width;
-  const translateX = scrollX.interpolate({
-    inputRange: [-1, 0, rightEdge, rightEdge + 1],
-    outputRange: [-1, 0, 0, 1],
-  });
-
-  console.log('RENDER VIEW', index);
+  const animatedStyles = useAnimatedStyle(() => ({
+    width,
+    transform: [
+      {
+        translateX: interpolate(
+          scrollX.value,
+          [-1, 0, rightEdge, rightEdge + 1],
+          [-1, 0, 0, 1],
+          Extrapolation.EXTEND,
+        ),
+      },
+    ],
+  }));
 
   return (
-    <Animated.View {...props} style={[style, { width, transform: [{ translateX }] }]}>
+    <Animated.View {...props} style={[style, animatedStyles]}>
       {images.map((image, imageIndex) => (
         <SwiperImage
           key={imageIndex}
           source={image}
-          animatedValue={animatedOffset}
-          imageOffset={shiftImage * imageIndex}
+          index={index}
+          offset={imageIndex * parallaxShift}
+          stiffness={stiffness}
+          damping={damping}
+          mass={mass}
         />
       ))}
       <View style={contentStyle}>{children}</View>

@@ -1,231 +1,230 @@
-# React Native Userpic
+# React Native Parallax Swiper
 
-<table>
-<tr>
-<td>
-<img width="200" align="left" src="https://github.com/kolking/react-native-userpic/assets/4656448/877fbd1b-7040-41d4-a29b-80958b9b7cdd" />
-</td>
-<td>
-The ultimate React Native component for displaying user avatars written in TypeScript with a strong focus on performance. This fully featured and highly customizable component allows you to show Gravatar images by providing an email address, fallback to user's initials, fine-tune the shape and size of avatars, add badges and custom statuses to the avatar image.
-</td>
-</tr>
-</table>
+A React Native component for building an impressive horizontal swiper with a parallax effect. The parallax swiper is great for creating an onboarding UI for your app or for displaying multi-screen swipeable announcements that should catch users' attention. The component utilizes the Reanimated library to achieve seamless 120fps animations.
 
----
-
-<img width="200" align="left" src="https://github.com/kolking/react-native-userpic/assets/4656448/53d8eec3-6685-4b6b-9d85-261e7f391b11" />
-
-**Control the shape of the avatars**  
-The default circular shape can be changed by specifying a custom border radius. The `style` prop enables you to override the default styles.
-
----
-
-<img width="200" align="left" src="https://github.com/kolking/react-native-userpic/assets/4656448/d7a4a923-fb79-4734-8092-7531835876ce" />
-
-**Custom fallback image or emoji**  
-For users without an image, you have the option to display the default avatar icon, provide a custom fallback image, or even show an emoji.
-
----
-
-<img width="200" align="left" src="https://github.com/kolking/react-native-userpic/assets/4656448/de5dfe87-37ba-49ad-ba73-1e7828c06468" />
-
-**Fallback to user's initials**  
-Another option for users without an image is to display their initials. By enabling the `colorize` option, unique color can be generated based on the user's name.
-
----
-
-<img width="200" align="left" src="https://github.com/kolking/react-native-userpic/assets/4656448/06e2e2e6-10f7-420e-a381-3f2fd154b82a" />
-
-**Gravatar support**  
-Include the user's email address to display their Gravatar image. This can be combined with your own avatar image to provide a fallback option.
-
----
-
-<img width="200" align="left" src="https://github.com/kolking/react-native-userpic/assets/4656448/91f3bab9-f1cd-4d4d-9965-967ca524f484" />
-
-**Numeric badges**  
-You can add a badge to display the count of unread messages or the online/offline status of the user. The position of the badge can also be customized.
-
----
-
-<img width="200" align="left" src="https://github.com/kolking/react-native-userpic/assets/4656448/9b7a07b9-b988-492c-b9d0-e74e3e3208ed" />
-
-**Custom badges**  
-Another option for utilizing avatar badges is to display a custom status icon, such as an emoji, for example.
-
----
+<p align="center">
+  <img width="300" src="https://github.com/user-attachments/assets/19d2f5d7-4558-45ef-b82c-e7231f28dff1">
+</p>
 
 ## Installation
 
+First of all, make sure you have installed and properly configured Reanimated. Please referer to the official [installation guide](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/getting-started#installation).
+
 ### yarn
 ```sh
-yarn add react-native-userpic
+yarn add @kolking/react-native-parallax-swiper
 ```
 ### npm
 ```sh
-npm install react-native-userpic
+npm install @kolking/react-native-parallax-swiper
 ```
+
+## Create Image Layers
+
+To achieve the parallax effect, you need to create a set of image layers, with each layer representing a different depth of the scene. A minimum of 3 layers (though 5 would be better) is required for each slide. Your scene may contain details beyond the screen that will become visible during parallax movement. In such cases, make the layers wider than the device viewport. There are many instructions on how to create layers for parallax scenes, so if you've never done it before, be sure to Google it. Below is a simple example of the layers for a single slide:
+
+![layers](https://github.com/user-attachments/assets/9b1b5696-9a02-484d-ab03-d61dc4e4fb5f)
 
 ## Basic Example
 
 ```jsx
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Userpic } from 'react-native-userpic';
+import { ImageSourcePropType } from 'react-native';
+import { Swiper, SwiperView } from '@kolking/react-native-parallax-swiper';
 
-const MyComponent = ({ userImage, userEmail }) => (
-  <View style={styles.wrapper}>
-    <Userpic source={{ uri: userImage }} email={userEmail} />
-  </View>
-);
+type Content = {
+  images: ImageSourcePropType[];
+};
 
-const styles = StyleSheet.create({
-  wrapper: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+const views: Content[] = [
+  {
+    images: [
+      require('./assets/Slide1-Layer1.png'),
+      require('./assets/Slide1-Layer2.png'),
+      require('./assets/Slide1-Layer3.png'),
+    ],
   },
-});
+  {
+    images: [
+      require('./assets/Slide2-Layer1.png'),
+      require('./assets/Slide2-Layer2.png'),
+      require('./assets/Slide2-Layer3.png'),
+    ],
+  },
+];
+
+const MyComponent = () => (
+  <Swiper>
+    {views.map(({ images }, index) => (
+      <SwiperView key={index} index={index} images={images} />
+    ))}
+  </Swiper>
+);
 
 export default MyComponent;
 ```
 
-## Advanced Example
+## `Swiper` Props
 
-```jsx
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Userpic } from 'react-native-userpic';
-
-const defaultImage = require('./assets/defaultAvatar.png');
-const badgeProps = {
-  size: 24,
-  radius: 5,
-  position: 'top-left',
-}
-
-const MyComponent = ({ userImage, userEmail, userName, unreadCount }) => (
-  <View style={styles.wrapper}>
-    <Userpic
-      size={60}
-      defaultSource={defaultImage}
-      source={{ uri: userImage }}
-      email={userEmail}
-      name={userName}
-      colorize={true}
-      radius={20}
-      badge={unreadCount}
-      badgeColor="#007aff"
-      badgeProps={badgeProps}
-    />
-  </View>
-);
-
-const styles = StyleSheet.create({
-  wrapper: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
-
-export default MyComponent;
-```
-
-## Props
+The `Swiper` is a `ScrollView` component, so you can pass `ScrollViewProps` such as `onScroll`, `onMomentumScrollEnd`, and so on.
 
 Prop | Type | Default | Description
 ---|---|---|---
-`size` | number | `50` | Width and height of the avatar
-`name` | string | | User name for showing initials
-`email` | string | | User email for showing Gravatar image
-`source` | ImageSourcePropType | | The avatar image source (either a remote URL or a local file resource)
-`defaultSource` | ImageSourcePropType | | The fallback image source
-`color` | string | `#aeaeb2` | Background color of the avatar
-`radius` | number | `size / 2` | Border radius of the avatar
-`colorize` | boolean | `false` | To generate a unique background color when displaying initials
-`style` | ViewStyle | | Style object applied to the image or initials container
-`textStyle` | TextStyle | | Style object applied to the initials text
-`badge` | number \| string \| boolean | | A number or string value to show in the badge, or `true` to display a color dot
-`badgeColor` | string | | Background color of the badge
-`badgeProps` | BadgeProps | | [Badge props](#badge-props) excluding `value`, `color`, and `parentRadius`
+`current` | number | | The current slide index, used in controlled mode
+`style` | ViewStyle | | Style object applied to the ScrollView
+`onChange` | (index: number) => void | | The callback that return the current slide index after change
 
-## Badge Component
+## `SwiperView` Props
 
-<img width="200" align="left" src="https://github.com/kolking/react-native-userpic/assets/4656448/6ee48b43-d2ac-40bb-ab21-152a93637e4a" />
+Prop | Type | Default | Description
+---|---|---|---
+`index` | number | | The view number (required)
+`images` | ImageSourcePropType[] | | The array of image layers where background is the first and foreground is the last (required)
+`parallax` | number | `1` | The amount of the parallax shift, where 0 means no parallax
+`stiffness` | number | `50` | The stiffness of the spring animation
+`damping` | number | `50` | The damping of the spring animation
+`mass` | number | `1` | The mass of the spring animation
+`contentStyle` | ViewStyle | | Style object applied to the content wrapper
 
-The badge can be used as a standalone component. The font size of the badge text value is calculated based on the `size` prop, so you normally don't have to specify it. By default, the badge appears with a spring animation, which can be disabled using the `animate` prop. To position the badge absolutely over its parent, use the `position` prop along with the `parentRadius` prop.
+## Advanced Example
 
-<br clear="both" />
+In the advanced example, the slides can also be swiped using buttons, and a [page indicator](https://github.com/kolking/react-native-page-indicator) is added to the bottom.
 
 ```jsx
-import React, { useState } from 'react';
-import { StyleSheet, Text, TouchableHighlight, View } from 'react-native';
-import { Badge } from 'react-native-userpic';
+import React, { useCallback, useRef, useState } from 'react';
+import {
+  Animated,
+  ImageSourcePropType,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
+} from 'react-native';
+import { Swiper, SwiperView } from '@kolking/react-native-parallax-swiper';
+import { PageIndicator } from 'react-native-page-indicator';
 
-const MyComponent = () => {
-  const [badge, setBadge] = useState(0);
+type Content = {
+  title: string;
+  text: string;
+  images: ImageSourcePropType[];
+};
+
+const views: Content[] = [
+  {
+    title: 'Slide 1',
+    text: 'Slide 1 description.',
+    images: [
+      require('./assets/Slide1-Layer1.png'),
+      require('./assets/Slide1-Layer2.png'),
+      require('./assets/Slide1-Layer3.png'),
+    ],
+  },
+  {
+    title: 'Slide 2',
+    text: 'Slide 2 description.',
+    images: [
+      require('./assets/Slide2-Layer1.png'),
+      require('./assets/Slide2-Layer2.png'),
+      require('./assets/Slide2-Layer3.png'),
+    ],
+  },
+];
+
+type ButtonProps = {
+  index: number;
+  onPress: (index: number) => void;
+};
+
+const Button = ({ index, onPress }: ButtonProps) => {
+  const isLast = index + 1 === views.length;
+
+  const handlePress = useCallback(() => {
+    onPress(isLast ? 0 : index + 1);
+  }, [isLast, index, onPress]);
 
   return (
-    <View style={styles.wrapper}>
-      <TouchableHighlight
-        style={styles.button}
-        underlayColor="#00849C"
-        onPress={() => setBadge(badge + 1)}
-      >
-        <>
-          <Text style={styles.buttonText}>Press me</Text>
-          <Badge value={badge} position="top-right" parentRadius={styles.button.borderRadius} />
-        </>
-      </TouchableHighlight>
+    <TouchableOpacity style={styles.button} activeOpacity={0.5} onPress={handlePress}>
+      <Text style={styles.buttonText}>{isLast ? 'Start Over' : 'Next'}</Text>
+    </TouchableOpacity>
+  );
+};
+
+const MyComponent = () => {
+  const { width } = useWindowDimensions();
+  const [current, setCurrent] = useState(0);
+  const currentPage = useRef(new Animated.Value(0)).current;
+
+  const handleScroll = useCallback(
+    ({ nativeEvent }: NativeSyntheticEvent<NativeScrollEvent>) => {
+      currentPage.setValue(nativeEvent.contentOffset.x / width);
+    },
+    [currentPage, width],
+  );
+
+  return (
+    <View style={styles.root}>
+      <Swiper current={current} onChange={setCurrent} onScroll={handleScroll}>
+        {views.map(({ title, text, images }, index) => (
+          <SwiperView key={index} index={index} style={styles.view} images={images}>
+            <Text style={styles.title}>{title}</Text>
+            <Text style={styles.text}>{text}</Text>
+            <Button index={index} onPress={setCurrent} />
+          </SwiperView>
+        ))}
+      </Swiper>
+      <View style={styles.pageIndicator}>
+        <PageIndicator count={views.length} current={currentPage} color="white" />
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  wrapper: {
+  root: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+  },
+  view: {
+    paddingVertical: 70,
+    paddingHorizontal: 30,
+    justifyContent: 'flex-end',
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: '700',
+    marginBottom: 10,
+  },
+  text: {
+    fontSize: 15,
+    marginBottom: 20,
   },
   button: {
-    width: 200,
-    height: 44,
-    marginTop: 20,
-    borderRadius: 22,
-    alignSelf: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#2FAFC7',
+    padding: 12,
+    borderRadius: 5,
+    backgroundColor: 'skyblue',
   },
   buttonText: {
-    color: '#fff',
     fontSize: 17,
-    fontWeight: '600',
+    fontWeight: '700',
+    textAlign: 'center',
+  },
+  pageIndicator: {
+    left: 0,
+    right: 0,
+    bottom: 35,
+    alignItems: 'center',
+    position: 'absolute',
   },
 });
 
 export default MyComponent;
 ```
 
-## Badge Props
-
-Prop | Type | Default | Description
----|---|---|---
-`size` | number | `20` | Height and min width of the badge
-`color` | string | `#ff3b30` | Background color of the badge
-`radius` | number | `size / 2` | Border radius of the badge
-`animate` | boolean | `true` | To animate appearance with a spring animation
-`value` | number \| boolean \| string | | A number or string value to show in the badge, or `true` to display a color dot
-`limit` | number | `99` | To display "99+" when the `value` exceeds the limit, set `0` to disable
-`parentRadius` | number | `0` | Border radius of the parent container, used to position the badge more precisely
-`position` | BadgePositions | | To position the badge absolutely over its parent, the allowed options are `top-left`, `top-right`, `bottom-left`, and `bottom-right`
-`style` | ViewStyle | | Style object applied to the container
-`textStyle` | TextStyle | | Style object applied to the text
-
 ## Feedback
 
-I appreciate your feedback, so please star the repository if you like it. This is the best motivation for me to maintain the package and add new features. If you have any feature requests, found a bug, or have ideas for improvement, feel free to [open an issue](https://github.com/kolking/react-native-userpic/issues).
+I appreciate your feedback, so please star the repository if you like it. This is the best motivation for me to maintain the package and add new features. If you have any feature requests, found a bug, or have ideas for improvement, feel free to [open an issue](https://github.com/kolking/react-native-parallax-swiper/issues).
 
 ## License
 

@@ -1,13 +1,17 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 import {
-  Animated,
   NativeSyntheticEvent,
   NativeScrollEvent,
-  ScrollView,
   ScrollViewProps,
   StyleSheet,
   useWindowDimensions,
 } from 'react-native';
+import Animated, {
+  scrollTo,
+  useAnimatedRef,
+  useDerivedValue,
+  useScrollViewOffset,
+} from 'react-native-reanimated';
 
 import { Context } from './context';
 
@@ -26,19 +30,17 @@ export const Swiper = ({
 }: SwiperProps) => {
   const { width } = useWindowDimensions();
   const viewIndex = useRef(current || 0);
-  const scrollRef = useRef<ScrollView>(null);
+  const scrollRef = useAnimatedRef<Animated.ScrollView>();
+  const scrollX = useScrollViewOffset(scrollRef);
   const totalViews = React.Children.count(props.children);
   const contentOffset = { x: viewIndex.current * width, y: 0 };
-  const scrollX = useRef(new Animated.Value(contentOffset.x)).current;
 
-  useEffect(() => console.log('> MOUNTED SWIPER'), []);
-
-  useEffect(() => {
+  useDerivedValue(() => {
     // Scroll to the current view in controlled mode
     if (current !== undefined) {
-      scrollRef.current?.scrollTo({ x: current * width, y: 0, animated: true });
+      scrollTo(scrollRef, current * width, 0, true);
     }
-  }, [current, width]);
+  });
 
   const handleScrollEnd = useCallback(
     (e: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -54,28 +56,22 @@ export const Swiper = ({
     [width, onChange, onMomentumScrollEnd],
   );
 
-  console.log('RENDER SWIPER');
-
   return (
     <Context.Provider value={{ width, totalViews, scrollX }}>
       <Animated.ScrollView
         {...props}
         ref={scrollRef}
         style={[styles.root, style]}
-        bounces={false}
         horizontal={true}
         pagingEnabled={true}
-        scrollEventThrottle={16}
+        scrollEventThrottle={8}
         pinchGestureEnabled={false}
         contentOffset={contentOffset}
         disableIntervalMomentum={true}
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         onMomentumScrollEnd={handleScrollEnd}
-        onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], {
-          useNativeDriver: false,
-          listener: onScroll,
-        })}
+        onScroll={onScroll}
       />
     </Context.Provider>
   );
