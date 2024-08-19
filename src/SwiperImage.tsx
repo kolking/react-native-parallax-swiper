@@ -49,8 +49,6 @@ const SwiperImage = ({ index, offset, source, stiffness, damping, mass }: Swiper
     ],
   }));
 
-  console.log('RENDER IMAGE');
-
   return (
     <View style={styles.wrapper}>
       <Animated.Image source={source} style={animatedStyles} />

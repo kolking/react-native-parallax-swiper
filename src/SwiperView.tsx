@@ -46,8 +46,6 @@ export const SwiperView = ({
     ],
   }));
 
-  console.log('RENDER VIEW', index);
-
   return (
     <Animated.View {...props} style={[style, animatedStyles]}>
       {images.map((image, imageIndex) => (

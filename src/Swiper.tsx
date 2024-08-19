@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 import {
   NativeSyntheticEvent,
   NativeScrollEvent,
@@ -35,8 +35,6 @@ export const Swiper = ({
   const totalViews = React.Children.count(props.children);
   const contentOffset = { x: viewIndex.current * width, y: 0 };
 
-  useEffect(() => console.log('> MOUNTED SWIPER'), []);
-
   useDerivedValue(() => {
     // Scroll to the current view in controlled mode
     if (current !== undefined) {
@@ -57,8 +55,6 @@ export const Swiper = ({
     },
     [width, onChange, onMomentumScrollEnd],
   );
-
-  console.log('RENDER SWIPER');
 
   return (
     <Context.Provider value={{ width, totalViews, scrollX }}>
