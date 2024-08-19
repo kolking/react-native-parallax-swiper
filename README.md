@@ -3,7 +3,7 @@
 A React Native component for building an impressive horizontal swiper with a parallax effect. The parallax swiper is great for creating an onboarding UI for your app or for displaying multi-screen swipeable announcements that should catch users' attention. The component utilizes the Reanimated library to achieve seamless 120fps animations.
 
 <p align="center">
-  <img width="300" src="https://github.com/user-attachments/assets/19d2f5d7-4558-45ef-b82c-e7231f28dff1">
+  <img width="300" src="https://github.com/user-attachments/assets/cf291433-5842-4767-9b8a-af30fc3af42e">
 </p>
 
 ## Installation
@@ -23,7 +23,7 @@ npm install @kolking/react-native-parallax-swiper
 
 To achieve the parallax effect, you need to create a set of image layers, with each layer representing a different depth of the scene. A minimum of 3 layers (though 5 would be better) is required for each slide. Your scene may contain details beyond the screen that will become visible during parallax movement. In such cases, make the layers wider than the device viewport. There are many instructions on how to create layers for parallax scenes, so if you've never done it before, be sure to Google it. Below is a simple example of the layers for a single slide:
 
-![layers](https://github.com/user-attachments/assets/9b1b5696-9a02-484d-ab03-d61dc4e4fb5f)
+![layers](https://github.com/user-attachments/assets/e9acb287-dc4b-4401-b374-010c7980d954)
 
 ## Basic Example
 
@@ -84,6 +84,7 @@ Prop | Type | Default | Description
 `stiffness` | number | `50` | The stiffness of the spring animation
 `damping` | number | `50` | The damping of the spring animation
 `mass` | number | `1` | The mass of the spring animation
+`style` | ViewStyle | | Style object applied to the view
 `contentStyle` | ViewStyle | | Style object applied to the content wrapper
 
 ## Advanced Example
