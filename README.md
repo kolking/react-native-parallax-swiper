@@ -29,35 +29,24 @@ To achieve the parallax effect, you need to create a set of image layers, with e
 
 ```jsx
 import React from 'react';
-import { ImageSourcePropType } from 'react-native';
 import { Swiper, SwiperView } from '@kolking/react-native-parallax-swiper';
 
-type Content = {
-  images: ImageSourcePropType[];
-};
+const slide1 = [
+  require('./assets/Slide1-Layer1.png'),
+  require('./assets/Slide1-Layer2.png'),
+  require('./assets/Slide1-Layer3.png'),
+];
 
-const views: Content[] = [
-  {
-    images: [
-      require('./assets/Slide1-Layer1.png'),
-      require('./assets/Slide1-Layer2.png'),
-      require('./assets/Slide1-Layer3.png'),
-    ],
-  },
-  {
-    images: [
-      require('./assets/Slide2-Layer1.png'),
-      require('./assets/Slide2-Layer2.png'),
-      require('./assets/Slide2-Layer3.png'),
-    ],
-  },
+const slide2 = [
+  require('./assets/Slide2-Layer1.png'),
+  require('./assets/Slide2-Layer2.png'),
+  require('./assets/Slide2-Layer3.png'),
 ];
 
 const MyComponent = () => (
   <Swiper>
-    {views.map(({ images }, index) => (
-      <SwiperView key={index} index={index} images={images} />
-    ))}
+    <SwiperView index={1} images={slide1} />
+    <SwiperView index={2} images={slide2} />
   </Swiper>
 );
 
