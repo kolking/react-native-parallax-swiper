@@ -58,7 +58,7 @@ const SwiperImage = ({ index, offset, source, stiffness, damping, mass }: Swiper
 
 const styles = StyleSheet.create({
   wrapper: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
