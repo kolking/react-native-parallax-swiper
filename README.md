@@ -8,7 +8,7 @@ A React Native component for building an impressive horizontal swiper with a par
 
 ## Installation
 
-First of all, make sure you have installed and properly configured Reanimated. Please refer to the official [installation guide](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/getting-started#installation).
+Install and configure Reanimated and its matching Worklets version before using the swiper. The example app uses Reanimated 4.8 and Worklets 0.14 with React Native 0.88. Add `react-native-worklets/plugin` last in your Babel plugins. See the [Reanimated installation guide](https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/getting-started/) and [compatibility table](https://docs.swmansion.com/react-native-reanimated/docs/guides/compatibility/) for other React Native versions.
 
 ### yarn
 ```sh
